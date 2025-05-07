@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora EIA-96</title>
+  <link rel="stylesheet" href="../styles/style.css" />
+</head>
+<body>
+  <h1>Calculadora de Resistencias EIA-96</h1>
+  <form oninput="calc()">
+    <input type="text" id="codigo" placeholder="Ej: 24B, 82C..." />
+    <button type="button" onclick="calc()">Calcular</button>
+    <p id="resultado"></p>
+  </form>
+  <a href="index.html">&larr; Volver al índice</a>
+<script>
+const tabla = {
+  24: 178, 82: 665, 10: 100, 12: 121, 15: 150, 16: 162
+};
+const multiplicadores = {
+  A: 1, B: 10, C: 100, D: 1e3, E: 10e3, F: 100e3
+};
+function calc() {
+  const c = document.getElementById("codigo").value.trim().toUpperCase();
+  const num = parseInt(c.slice(0, -1));
+  const letra = c.slice(-1);
+  if (tabla[num] && multiplicadores[letra]) {
+    const valor = tabla[num] * multiplicadores[letra];
+    document.getElementById("resultado").textContent = valor + " Ω";
+  } else {
+    document.getElementById("resultado").textContent = "Código inválido";
+  }
+}
+</script>
+</body>
+</html>

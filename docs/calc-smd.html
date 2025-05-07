@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora SMD</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #f0f0f0; max-width: 600px; margin: auto; }
+    h1 { color: #003366; }
+    input, select, button { width: 100%; padding: 1rem; margin-top: 1rem; font-size: 1rem; }
+    #resultado { margin-top: 1rem; font-weight: bold; }
+    a { display: block; margin-top: 2rem; text-align: center; color: #007acc; }
+  </style>
+</head>
+<body>
+<h1>Calculadora de Resistencias SMD</h1>
+<select id="tipo">
+  <option value="3">Código de 3 dígitos</option>
+  <option value="4">Código de 4 dígitos</option>
+</select>
+<input id="codigo" placeholder="Ejemplo: 472 o 4703">
+<button onclick="calcular()">Calcular</button>
+<div id="resultado"></div>
+<a href="index.html">Volver al índice</a>
+<script>
+const series = {
+  E6: [10, 15, 22, 33, 47, 68],
+  E12: [10, 12, 15, 18, 22, 27, 33, 39, 47, 56, 68, 82],
+  E24: [10,11,12,13,15,16,18,20,22,24,27,30,33,36,39,43,47,51,56,62,68,75,82,91],
+  E96: [100,102,105,107,110,113,115,118,121,124,127,130,133,137,140,143,147,150,154,158,162,165,169,174,178,182,187,191,196,200,205,210,215,221,226,232,237,243,249,255,261,267,274,280,287,294,301,309,316,324,332,340,348,357,365,374,383,392,402,412,422,432,442,453,464,475,487,499,511,523,536,549,562,576,590,604,619,634,649,665,681,698,715,732,750,768,787,806,825,845,866,887,909,931,953,976]
+};
+function calcular() {
+  const c = document.getElementById("codigo").value.trim();
+  const t = document.getElementById("tipo").value;
+  const r = document.getElementById("resultado");
+  if (!/^[0-9]{3,4}$/.test(c)) { r.innerText = "⚠️ Código inválido."; return; }
+  let valor = 0;
+  if (t === "3" && c.length === 3) valor = parseInt(c.slice(0,2)) * Math.pow(10, parseInt(c[2]));
+  else if (t === "4" && c.length === 4) valor = parseInt(c.slice(0,3)) * Math.pow(10, parseInt(c[3]));
+  else { r.innerText = "⚠️ Código no válido."; return; }
+
+  let unidad = "Ω", display = valor;
+  if (valor >= 1e6) { display = (valor/1e6).toFixed(2); unidad = "MΩ"; }
+  else if (valor >= 1e3) { display = (valor/1e3).toFixed(2); unidad = "kΩ"; }
+  else if (valor < 10) { display = valor.toFixed(2); }
+
+  const sig = parseInt(c.length === 3 ? c.slice(0,2) : c.slice(0,3));
+  let serie = "⚠️ Valor NO normalizado ☺";
+  if (series.E96.includes(sig)) serie = "Serie E96";
+  else if (series.E24.includes(sig)) serie = "Serie E24";
+  else if (series.E12.includes(sig)) serie = "Serie E12";
+  else if (series.E6.includes(sig)) serie = "Serie E6";
+
+  r.innerHTML = `<strong>${c}</strong> → ${display} ${unidad} (${serie})`;
+}
+</script>
+</body>
+</html>

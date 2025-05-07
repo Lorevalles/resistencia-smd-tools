@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Combinación de Resistencias</title>
+  <style>
+    body { font-family: sans-serif; background: #f9f9f9; padding: 2rem; max-width: 700px; margin: auto; }
+    h1 { color: #003366; text-align: center; }
+    input, select, button { font-size: 1rem; padding: 0.6rem; margin-top: 0.5rem; width: 100%; }
+    .grupo { margin-bottom: 1rem; }
+    .modo { display: flex; gap: 1rem; justify-content: center; margin-bottom: 1rem; }
+    .modo label { cursor: pointer; }
+    #resultado { margin-top: 1rem; font-weight: bold; text-align: center; }
+    footer { margin-top: 2rem; text-align: center; color: #777; }
+    a { display: block; text-align: center; margin-top: 2rem; }
+  </style>
+</head>
+<body>
+<h1>Combinación de Resistencias</h1>
+
+<div class="modo">
+  <label><input type="radio" name="modo" value="serie" checked> Serie</label>
+  <label><input type="radio" name="modo" value="paralelo"> Paralelo</label>
+</div>
+
+<div id="entradas"></div>
+<button onclick="calcular()">Calcular</button>
+
+<div id="resultado"></div>
+<a href="index.html">Volver al índice</a>
+
+<script>
+function crearEntradas() {
+  const contenedor = document.getElementById("entradas");
+  for (let i = 1; i <= 5; i++) {
+    let div = document.createElement("div");
+    div.className = "grupo";
+    div.innerHTML = `<input id="r${i}" placeholder="Resistencia ${i} (ej: 10Ω, 4.7k, 1.5M)">`;
+    contenedor.appendChild(div);
+  }
+}
+function parseValor(v) {
+  v = v.toLowerCase().replace(',', '.').trim();
+  if (v.endsWith("m")) return parseFloat(v) * 1e6;
+  if (v.endsWith("k")) return parseFloat(v) * 1e3;
+  if (v.endsWith("ω")) return parseFloat(v);
+  if (!isNaN(parseFloat(v))) return parseFloat(v);
+  return NaN;
+}
+function mostrar(v) {
+  if (v >= 1e6) return `${(v/1e6).toFixed(2)} MΩ`;
+  if (v >= 1e3) return `${(v/1e3).toFixed(2)} kΩ`;
+  return `${v.toFixed(2)} Ω`;
+}
+function calcular() {
+  const modo = document.querySelector('input[name="modo"]:checked').value;
+  let valores = [];
+  for (let i = 1; i <= 5; i++) {
+    let v = document.getElementById("r" + i).value.trim();
+    if (v) {
+      let ohm = parseValor(v);
+      if (isNaN(ohm) || ohm <= 0) {
+        document.getElementById("resultado").innerHTML = `⚠️ Valor inválido en R${i}`;
+        return;
+      }
+      valores.push(ohm);
+    }
+  }
+  if (valores.length < 1) {
+    document.getElementById("resultado").innerHTML = "⚠️ Introduce al menos un valor válido.";
+    return;
+  }
+  let total = 0;
+  if (modo === "serie") {
+    total = valores.reduce((a, b) => a + b, 0);
+  } else {
+    total = 1 / valores.reduce((a, b) => a + (1 / b), 0);
+  }
+  document.getElementById("resultado").innerHTML = `<strong>Total:</strong><br>` + mostrar(total);
+}
+crearEntradas();
+</script>
+
+<footer>Proyecto por Lorenzo Vallés — Resistencias combinadas</footer>
+</body>
+</html>
