@@ -1,3 +1,5 @@
+https://lorevalles.github.io/resistencia-smd-tools/index.html
+
 🎉 Bienvenido al Proyecto SMD Calculator 🎉
 ¡Hola humano curioso! 😊 Has llegado al lugar correcto si quieres descubrir el mundo mágico de las resistencias y capacitores en formato SMD. Este repositorio es como un tesoro lleno de herramientas y tablas útiles que te ayudarán a entender mejor esos pequeños componentes electrónicos que hacen que tus circuitos cobren vida.
 
