@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Divisor de Voltaje - Calculadora</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #007bff;
+      margin-top: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    input {
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #resultados {
+      margin-top: 20px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    #instrucciones {
+      margin-bottom: 20px;
+      font-size: 16px;
+      color: #555;
+    }
+
+    /* Estilo del botón de regreso */
+    .back-button {
+      display: block;
+      margin-top: 20px;
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      text-align: center;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Calculadora de Divisor de Voltaje</h1>
+
+    <!-- Botón de regreso -->
+    <a href="index.html" class="back-button">Regresar al Inicio</a>
+
+    <!-- Instrucciones de uso -->
+    <div id="instrucciones">
+      <strong>Instrucciones:</strong>
+      <ul>
+        <li>Ingresa tres de los cuatro valores conocidos (V₁, Vout, R₁, R₂).</li>
+        <li>Deja en blanco el valor que deseas calcular.</li>
+        <li>Haz clic en "Calcular". El programa completará automáticamente el valor faltante y mostrará los resultados adicionales.</li>
+      </ul>
+    </div>
+
+    <!-- Mostrar la imagen del circuito -->
+    <img src="img/division_voltaje.png" alt="Circuito Divisor de Voltaje">
+
+    <!-- Formulario para ingresar datos -->
+    <form>
+      <label>Voltaje de entrada (V₁):</label>
+      <input type="number" id="vin" placeholder="Voltaje de entrada" />
+
+      <label>Voltaje de salida (Vout):</label>
+      <input type="number" id="vout" placeholder="Voltaje de salida" />
+
+      <label>Resistencia R₁:</label>
+      <input type="number" id="r1" placeholder="Valor de R₁" />
+
+      <label>Resistencia R₂:</label>
+      <input type="number" id="r2" placeholder="Valor de R₂" />
+
+      <button type="button" onclick="calcular()">Calcular</button>
+    </form>
+
+    <!-- Div para mostrar los resultados -->
+    <div id="resultados"></div>
+  </div>
+
+  <script>
+    function calcular() {
+      // Obtener valores de entrada
+      const vinInput = document.getElementById('vin');
+      const voutInput = document.getElementById('vout');
+      const r1Input = document.getElementById('r1');
+      const r2Input = document.getElementById('r2');
+
+      let vin = parseFloat(vinInput.value);
+      let vout = parseFloat(voutInput.value);
+      let r1 = parseFloat(r1Input.value);
+      let r2 = parseFloat(r2Input.value);
+
+      let resultados = "";
+
+      // Validar que al menos tres valores sean proporcionados
+      const valoresConocidos = [vin, vout, r1, r2].filter(valor => !isNaN(valor));
+      if (valoresConocidos.length < 3) {
+        resultados = "Por favor, ingresa al menos tres valores.";
+      } else {
+        // Calcular el valor desconocido y colocarlo en la casilla correspondiente
+        if (isNaN(vin)) {
+          vin = vout * ((r1 + r2) / r2);
+          vinInput.value = vin.toFixed(6);
+          resultados += `V₁ = ${vin.toFixed(6)} V<br>`;
+        } else if (isNaN(vout)) {
+          vout = vin * (r2 / (r1 + r2));
+          voutInput.value = vout.toFixed(6);
+          resultados += `V<sub>out</sub> = ${vout.toFixed(6)} V<br>`;
+        } else if (isNaN(r1)) {
+          r1 = r2 * ((vin / vout) - 1);
+          r1Input.value = r1.toFixed(6);
+          resultados += `R₁ = ${r1.toFixed(6)} Ω<br>`;
+        } else if (isNaN(r2)) {
+          r2 = r1 * (vout / (vin - vout));
+          r2Input.value = r2.toFixed(6);
+          resultados += `R₂ = ${r2.toFixed(6)} Ω<br>`;
+        }
+
+        // Si todos los valores están presentes, calcular intensidad y potencia
+        if (!isNaN(vin) && !isNaN(r1) && !isNaN(r2)) {
+          const i = vin / (r1 + r2);
+          resultados += `Intensidad (I) = ${i.toFixed(6)} A<br>`;
+
+          const pR1 = i ** 2 * r1;
+          const pR2 = i ** 2 * r2;
+          resultados += `Potencia disipada en R₁ = ${pR1.toFixed(6)} W<br>`;
+          resultados += `Potencia disipada en R₂ = ${pR2.toFixed(6)} W<br>`;
+
+          const pTotal = vin * i;
+          resultados += `Potencia total de la fuente = ${pTotal.toFixed(6)} W<br>`;
+        }
+      }
+
+      // Mostrar resultados
+      document.getElementById('resultados').innerHTML = resultados;
+    }
+  </script>
+</body>
+</html>

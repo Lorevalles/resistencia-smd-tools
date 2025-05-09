@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <style>
+    .component {
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      fill: black;
+    }
+    .label {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      fill: black;
+    }
+    .resistor {
+      stroke: #333;
+      stroke-width: 2;
+    }
+    .voltage-source {
+      stroke: #333;
+      stroke-width: 2;
+    }
+    .ground {
+      stroke: #333;
+      stroke-width: 2;
+    }
+  </style>
+
+  <!-- Voltage Source -->
+  <rect x="50" y="50" width="30" height="30" rx="5" ry="5" class="voltage-source" />
+  <text x="70" y="80" class="component">V₁</text>
+  <line x1="80" y1="50" x2="80" y2="80" class="voltage-source" />
+  <line x1="80" y1="50" x2="120" y1="50" class="voltage-source" />
+  <line x1="80" y1="80" x2="120" y1="80" class="voltage-source" />
+
+  <!-- Resistor R1 -->
+  <path d="M120,50 h20 c0,-10 10,-20 20,-20 h20 c10,0 20,10 20,20 v30 c0,10 -10,20 -20,20 h-20 c-10,0 -20,-10 -20,-20 z" class="resistor" />
+  <text x="150" y="90" class="component">R₁</text>
+
+  <!-- Resistor R2 -->
+  <path d="M220,80 h20 c0,-10 10,-20 20,-20 h20 c10,0 20,10 20,20 v30 c0,10 -10,20 -20,20 h-20 c-10,0 -20,-10 -20,-20 z" class="resistor" />
+  <text x="250" y="130" class="component">R₂</text>
+
+  <!-- Ground Symbol -->
+  <line x1="320" y1="110" x2="320" y2="140" class="ground" />
+  <polyline points="320,140 310,150 330,150 320,160 310,170 330,170 320,180" class="ground" />
+
+  <!-- Output Voltage Label -->
+  <text x="340" y="110" class="label">V<sub>out</sub></text>
+
+  <!-- Formula -->
+  <text x="100" y="160" class="label">V<sub>out</sub> = V₁ ×</text>
+  <text x="200" y="160" class="label">(R₂ / (R₁ + R₂))</text>
+  <text x="300" y="160" class="label">= V₁R₂ / (R₁ + R₂)</text>
+
+  <!-- Inputs y botón -->
+  <foreignObject x="10" y="200" width="580" height="200">
+    <div xmlns="http://www.w3.org/1999/xhtml">
+      <label>Voltaje de entrada (V₁):</label>
+      <input type="number" id="vin" placeholder="Voltaje de entrada" />
+      
+      <label>Voltaje de salida (Vout):</label>
+      <input type="number" id="vout" placeholder="Voltaje de salida" />
+      
+      <label>Resistencia R₁:</label>
+      <input type="number" id="r1" placeholder="Valor de R₁" />
+      
+      <label>Resistencia R₂:</label>
+      <input type="number" id="r2" placeholder="Valor de R₂" />
+      
+      <button onclick="calcular()">Calcular</button>
+      
+      <div id="resultados"></div>
+    </div>
+  </foreignObject>
+</svg>
+
+<script>
+function calcular() {
+  // Obtener valores de entrada
+  const vin = parseFloat(document.getElementById('vin').value);
+  const vout = parseFloat(document.getElementById('vout').value);
+  const r1 = parseFloat(document.getElementById('r1').value);
+  const r2 = parseFloat(document.getElementById('r2').value);
+
+  let resultados = "";
+
+  // Validar que al menos tres valores sean proporcionados
+  if (isNaN(vin) || (isNaN(vout) && isNaN(r1) && isNaN(r2))) {
+    resultados = "Por favor, ingresa al menos tres valores.";
+  } else {
+    if (isNaN(r1) && !isNaN(vin) && !isNaN(vout) && !isNaN(r2)) {
+      // Calcular R1 si está vacío
+      const calcR1 = r2 * ((vin / vout) - 1);
+      resultados += `R₁ = ${calcR1.toFixed(2)} Ω<br>`;
+    } else if (isNaN(r2) && !isNaN(vin) && !isNaN(vout) && !isNaN(r1)) {
+      // Calcular R2 si está vacío
+      const calcR2 = r1 * (vout / (vin - vout));
+      resultados += `R₂ = ${calcR2.toFixed(2)} Ω<br>`;
+    }
+
+    if (!isNaN(r1) && !isNaN(r2)) {
+      // Calcular intensidad
+      const i = vin / (r1 + r2);
+      resultados += `Intensidad (I) = ${i.toFixed(2)} A<br>`;
+
+      // Calcular potencia disipada en R1 y R2
+      const pR1 = i ** 2 * r1;
+      const pR2 = i ** 2 * r2;
+      resultados += `Potencia en R₁ = ${pR1.toFixed(2)} W<br>`;
+      resultados += `Potencia en R₂ = ${pR2.toFixed(2)} W<br>`;
+
+      // Calcular potencia total
+      const pTotal = vin * i;
+      resultados += `Potencia total = ${pTotal.toFixed(2)} W<br>`;
+    }
+  }
+
+  // Mostrar resultados
+  document.getElementById('resultados').innerHTML = resultados;
+}
+</script>
