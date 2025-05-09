@@ -1,91 +1,202 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Calculadora de Capacitores EIA-198</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
-        .keypad {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        button {
-            width: 50px;
-            height: 40px;
-            margin: 5px;
-            font-size: 16px;
-        }
-        #resultado {
-            margin-top: 20px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Capacitores EIA-198</title>
+  <style>
+    /* Estilos generales */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #007bff;
+      margin-top: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .keypad {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .keypad button {
+      width: 50px;
+      height: 40px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .keypad button:hover {
+      background-color: #0056b3;
+    }
+
+    .keypad button.special {
+      background-color: #dc3545;
+    }
+
+    .keypad button.special:hover {
+      background-color: #b02a37;
+    }
+
+    button.calcular {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button.calcular:hover {
+      background-color: #0056b3;
+    }
+
+    #resultado {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    a.back-link {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+      color: #007bff;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    a.back-link:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 20px;
+      text-align: center;
+      color: #777;
+      font-size: 0.9em;
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
     <h1>Calculadora de Capacitores EIA-198</h1>
-    <input type="text" id="codigo" readonly style="font-size: 20px; text-align: center;"><br><br>
+
+    <!-- Campo de Entrada -->
+    <input type="text" id="codigo" readonly placeholder="Código EIA-198">
+
+    <!-- Teclado Virtual -->
     <div class="keypad" id="teclado"></div>
-    <br>
-    <button onclick="calcular()">OK</button><br><br>
-    <a href="index.html">&larr; Volver al índice</a>
+
+    <!-- Botón de Cálculo -->
+    <button class="calcular" onclick="calcular()">Calcular</button>
+
+    <!-- Resultado -->
     <div id="resultado"></div>
 
-    <script>
-        const letrasValidas = ["A","B","C","D","E","F","G","H","J","K","L","M","N","P","Q","R","S","T","U",
-                               "V","W","X","Y","Z","a","b","d","e","f","m","n","t","y"];
-        const numerosValidos = ["0","1","2","3","4","5","6","7","8","9"];
-        const valores = {
-            A: 1, B: 1.1, C: 1.2, D: 1.3, E: 1.5, F: 1.6, G: 1.8, H: 2.0, J: 2.2, K: 2.4, a: 2.6, L: 2.7,
-            M: 3.0, N: 3.3, b: 3.5, P: 3.6, Q: 3.9, d: 4.0, R: 4.3, e: 4.5, S: 4.7, T: 5.1, U: 5.6, m: 6.0,
-            V: 6.2, W: 6.8, n: 7.0, X: 7.5, t: 8.0, Y: 8.2, y: 9.0, Z: 9.1
-        };
-        const multiplicadores = {
-            0: 1, 1: 10, 2: 100, 3: 1000, 4: 10000, 5: 100000, 6: 1000000,
-            7: 10000000, 8: 100000000, 9: 0.1
-        };
+    <!-- Enlace de Regreso -->
+    <a href="index.html" class="back-link">← Volver al índice</a>
 
-        const teclado = document.getElementById("teclado");
-        [...letrasValidas, ...numerosValidos].forEach(char => {
-            const btn = document.createElement("button");
-            btn.textContent = char;
-            btn.onclick = () => document.getElementById("codigo").value += char;
-            teclado.appendChild(btn);
-        });
-        const borrarBtn = document.createElement("button");
-        borrarBtn.textContent = "←";
-        borrarBtn.onclick = () => {
-            const input = document.getElementById("codigo");
-            input.value = input.value.slice(0, -1);
-        };
-        teclado.appendChild(borrarBtn);
+    <!-- Pie de Página -->
+    <footer>Proyecto por Lorenzo Vallés — Calculadora EIA-198</footer>
+  </div>
 
-        function calcular() {
-            const code = document.getElementById("codigo").value;
-            const output = document.getElementById("resultado");
-            if (code.length < 2) {
-                output.textContent = "Introduce al menos 2 caracteres.";
-                return;
-            }
-            const letra = code.charAt(0);
-            const num = code.charAt(1);
-            if (!(letra in valores) || !(num in multiplicadores)) {
-                output.textContent = "Código no válido.";
-                return;
-            }
-            const pF = valores[letra] * multiplicadores[num];
-            const nF = pF / 1000;
-            const uF = pF / 1e6;
-            output.innerHTML = `<strong>${code}</strong> → <strong>${pF.toFixed(2)} pF</strong> 
-                                (${nF.toFixed(3)} nF, ${uF.toFixed(6)} µF)`;
-        }
-    </script>
+  <script>
+    // Datos válidos
+    const letrasValidas = ["A","B","C","D","E","F","G","H","J","K","L","M","N","P","Q","R","S","T","U",
+                           "V","W","X","Y","Z","a","b","d","e","f","m","n","t","y"];
+    const numerosValidos = ["0","1","2","3","4","5","6","7","8","9"];
+    const valores = {
+      A: 1, B: 1.1, C: 1.2, D: 1.3, E: 1.5, F: 1.6, G: 1.8, H: 2.0, J: 2.2, K: 2.4, a: 2.6, L: 2.7,
+      M: 3.0, N: 3.3, b: 3.5, P: 3.6, Q: 3.9, d: 4.0, R: 4.3, e: 4.5, S: 4.7, T: 5.1, U: 5.6, m: 6.0,
+      V: 6.2, W: 6.8, n: 7.0, X: 7.5, t: 8.0, Y: 8.2, y: 9.0, Z: 9.1
+    };
+    const multiplicadores = {
+      0: 1, 1: 10, 2: 100, 3: 1000, 4: 10000, 5: 100000, 6: 1000000,
+      7: 10000000, 8: 100000000, 9: 0.1
+    };
+
+    // Crear teclado virtual
+    const teclado = document.getElementById("teclado");
+    [...letrasValidas, ...numerosValidos].forEach(char => {
+      const btn = document.createElement("button");
+      btn.textContent = char;
+      btn.onclick = () => document.getElementById("codigo").value += char;
+      teclado.appendChild(btn);
+    });
+
+    // Botón de borrado
+    const borrarBtn = document.createElement("button");
+    borrarBtn.textContent = "←";
+    borrarBtn.classList.add("special");
+    borrarBtn.onclick = () => {
+      const input = document.getElementById("codigo");
+      input.value = input.value.slice(0, -1);
+    };
+    teclado.appendChild(borrarBtn);
+
+    // Función para calcular el valor del capacitor
+    function calcular() {
+      const code = document.getElementById("codigo").value;
+      const output = document.getElementById("resultado");
+      if (code.length < 2) {
+        output.innerHTML = "⚠️ Introduce al menos 2 caracteres.";
+        return;
+      }
+      const letra = code.charAt(0);
+      const num = code.charAt(1);
+      if (!(letra in valores) || !(num in multiplicadores)) {
+        output.innerHTML = "⚠️ Código no válido.";
+        return;
+      }
+      const pF = valores[letra] * multiplicadores[num];
+      const nF = pF / 1000;
+      const uF = pF / 1e6;
+      output.innerHTML = `<strong>${code}</strong> → <strong>${pF.toFixed(2)} pF</strong> 
+                          (${nF.toFixed(3)} nF, ${uF.toFixed(6)} µF)`;
+    }
+  </script>
 </body>
 </html>

@@ -1,89 +1,304 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Combinador de Resistencias y Capacitores</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <style>
-        body { font-family: sans-serif; padding: 20px; background-color: #f5f5ff; color: #002244; }
-        .container { background: #ffffff; border-radius: 8px; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h1 { color: #003366; }
-        select, input { font-size: 1em; padding: 5px; margin: 5px; }
-        button { font-size: 1em; padding: 5px 10px; background: #003366; color: white; border: none; cursor: pointer; }
-        .results { background: #eef2ff; padding: 10px; margin-top: 20px; border-radius: 5px; }
-        .results h3 { margin-bottom: 5px; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Combinador de Resistencias y Capacitores</title>
+  <style>
+    /* Estilos generales */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #007bff;
+      margin-top: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    select,
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+
+    button.calcular {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button.calcular:hover {
+      background-color: #0056b3;
+    }
+
+    .results {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    .results h3 {
+      margin-bottom: 10px;
+      color: #007bff;
+    }
+
+    .results ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .results li {
+      margin-bottom: 5px;
+    }
+
+    .error-message {
+      font-size: 1.5rem; /* Letra más grande */
+      font-weight: bold; /* Negrita */
+      color: #ff5722; /* Color destacado */
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    a.back-link {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+      color: #007bff;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    a.back-link:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 20px;
+      text-align: center;
+      color: #777;
+      font-size: 0.9em;
+    }
+  </style>
 </head>
 <body>
-<div class="container">
+  <div class="container">
     <h1>Combinador de Resistencias y Capacitores</h1>
+
+    <!-- Selector de Tipo -->
     <label for="tipo">Selecciona tipo:</label>
     <select id="tipo" onchange="toggleUnidad()">
-        <option value="resistor">Resistencia</option>
-        <option value="capacitor">Capacitor</option>
-    </select><br>
+      <option value="resistor">Resistencia</option>
+      <option value="capacitor">Capacitor</option>
+    </select>
+
+    <!-- Valor Objetivo -->
     <label for="valor">Valor objetivo:</label>
-    <input type="number" id="valor" step="any"><br>
+    <input type="number" id="valor" step="any" placeholder="Ej: 10, 4.7, 100...">
+
+    <!-- Unidad (Solo para Capacitores) -->
     <div id="unidadDiv">
-        <label for="unidad">Unidad (solo para capacitores):</label>
-        <select id="unidad">
-            <option value="pF">pF</option>
-            <option value="nF">nF</option>
-            <option value="uF">µF</option>
-        </select><br>
+      <label for="unidad">Unidad (solo para capacitores):</label>
+      <select id="unidad">
+        <option value="pF">pF</option>
+        <option value="nF">nF</option>
+        <option value="uF">µF</option>
+        <option value="F">F</option>
+      </select>
     </div>
-    <button onclick="calcular()">Calcular</button>
+
+    <!-- Botón de Cálculo -->
+    <button class="calcular" onclick="calcular()">Calcular</button>
+
+    <!-- Resultados -->
     <div class="results" id="resultados"></div>
-    <br><a href="index.html">&larr; Volver al índice</a>
-</div>
-<script>
-const resistencias = [1, 2.2, 4.7, 6.8, 10, 18, 22, 33, 47, 56, 68, 82, 100, 120, 150, 180, 220, 270, 330, 390, 470, 560, 680, 820, 1000];
-const capacitores_pF = [0.5, 1, 1.5, 2.2, 3.3, 4.7, 6.8, 10, 15, 22, 33, 47, 56, 68, 82, 100, 120, 150, 180, 220, 270, 330, 390, 470, 560, 680, 820, 1000];
 
-function toggleUnidad() {
-    document.getElementById('unidadDiv').style.display =
+    <!-- Enlace de Regreso -->
+    <a href="index.html" class="back-link">← Volver al índice</a>
+
+    <!-- Pie de Página -->
+    <footer>Proyecto por Lorenzo Vallés — Combinador de Resistencias y Capacitores</footer>
+  </div>
+
+  <script>
+    // Valores normalizados de resistencias
+    const resistencias = [1, 2.2, 4.7, 6.8, 10, 18, 22, 33, 47, 56, 68, 82, 100, 120, 150, 180, 220, 270, 330, 390, 470, 560, 680, 820, 1000];
+
+    // Valores normalizados de capacitores (serie E12)
+    const capacitores_pF = [
+      1.0, 1.2, 1.5, 1.8, 2.2, 2.7, 3.3, 3.9, 4.7, 5.6, 6.8, 8.2,
+      10, 12, 15, 18, 22, 27, 33, 39, 47, 56, 68, 82,
+      100, 120, 150, 180, 220, 270, 330, 390, 470, 560, 680, 820,
+      1000, 1200, 1500, 1800, 2200, 2700, 3300, 3900, 4700, 5600, 6800, 8200,
+      10000, 12000, 15000, 18000, 22000, 27000, 33000, 39000, 47000, 56000, 68000, 82000,
+      100000, 120000, 150000, 180000, 220000, 270000, 330000, 390000, 470000, 560000, 680000, 820000,
+      1000000, 1200000, 1500000, 1800000, 2200000, 2700000, 3300000, 3900000, 4700000, 5600000, 6800000, 8200000,
+      10000000, 12000000, 15000000, 18000000, 22000000, 27000000, 33000000, 39000000, 47000000, 56000000, 68000000, 82000000,
+      100000000, 120000000, 150000000, 180000000, 220000000, 270000000, 330000000, 390000000, 470000000, 560000000, 680000000, 820000000,
+      1000000000, 1200000000, 1500000000, 1800000000, 2200000000, 2700000000, 3300000000, 3900000000, 4700000000, 5600000000, 6800000000, 8200000000,
+      10000000000, 12000000000, 15000000000, 18000000000, 22000000000, 27000000000, 33000000000, 39000000000, 47000000000, 56000000000, 68000000000, 82000000000,
+      100000000000, 120000000000, 150000000000, 180000000000, 220000000000, 270000000000, 330000000000, 390000000000, 470000000000, 560000000000, 680000000000, 820000000000,
+      1000000000000, 1200000000000, 1500000000000, 1800000000000, 2200000000000, 2700000000000, 3300000000000, 3900000000000, 4700000000000, 5600000000000, 6800000000000, 8200000000000,
+      10000000000000, 12000000000000, 15000000000000, 18000000000000, 22000000000000, 27000000000000, 33000000000000, 39000000000000, 47000000000000, 56000000000000, 68000000000000, 82000000000000,
+      100000000000000, 120000000000000, 150000000000000, 180000000000000, 220000000000000, 270000000000000, 330000000000000, 390000000000000, 470000000000000, 560000000000000, 680000000000000, 820000000000000,
+      1000000000000000, 1200000000000000, 1500000000000000, 1800000000000000, 2200000000000000, 2700000000000000, 3300000000000000, 3900000000000000, 4700000000000000, 5600000000000000, 6800000000000000, 8200000000000000,
+      10000000000000000, 12000000000000000, 15000000000000000, 18000000000000000, 22000000000000000, 27000000000000000, 33000000000000000, 39000000000000000, 47000000000000000, 56000000000000000, 68000000000000000, 82000000000000000,
+      100000000000000000, 120000000000000000, 150000000000000000, 180000000000000000, 220000000000000000, 270000000000000000, 330000000000000000, 390000000000000000, 470000000000000000, 560000000000000000, 680000000000000000, 820000000000000000,
+      1000000000000000000, 1200000000000000000, 1500000000000000000, 1800000000000000000, 2200000000000000000, 2700000000000000000, 3300000000000000000, 3900000000000000000, 4700000000000000000, 5600000000000000000, 6800000000000000000, 8200000000000000000,
+      10000000000000000000, 12000000000000000000, 15000000000000000000, 18000000000000000000, 22000000000000000000, 27000000000000000000, 33000000000000000000, 39000000000000000000, 47000000000000000000, 56000000000000000000, 68000000000000000000, 82000000000000000000,
+      100000000000000000000, 120000000000000000000, 150000000000000000000, 180000000000000000000, 220000000000000000000, 270000000000000000000, 330000000000000000000, 390000000000000000000, 470000000000000000000, 560000000000000000000, 680000000000000000000, 820000000000000000000,
+      1000000000000000000000, 1200000000000000000000, 1500000000000000000000, 1800000000000000000000, 2200000000000000000000, 2700000000000000000000, 3300000000000000000000, 3900000000000000000000, 4700000000000000000000, 5600000000000000000000, 6800000000000000000000, 8200000000000000000000,
+      10000000000000000000000, 12000000000000000000000, 15000000000000000000000, 18000000000000000000000, 22000000000000000000000, 27000000000000000000000, 33000000000000000000000, 39000000000000000000000, 47000000000000000000000, 56000000000000000000000, 68000000000000000000000, 82000000000000000000000,
+      100000000000000000000000, 120000000000000000000000, 150000000000000000000000, 180000000000000000000000, 220000000000000000000000, 270000000000000000000000, 330000000000000000000000, 390000000000000000000000, 470000000000000000000000, 560000000000000000000000, 680000000000000000000000, 820000000000000000000000,
+      1000000000000000000000000, 1200000000000000000000000, 1500000000000000000000000, 1800000000000000000000000, 2200000000000000000000000, 2700000000000000000000000, 3300000000000000000000000, 3900000000000000000000000, 4700000000000000000000000, 5600000000000000000000000, 6800000000000000000000000, 8200000000000000000000000,
+      10000000000000000000000000, 12000000000000000000000000, 15000000000000000000000000, 18000000000000000000000000, 22000000000000000000000000, 27000000000000000000000000, 33000000000000000000000000, 39000000000000000000000000, 47000000000000000000000000, 56000000000000000000000000, 68000000000000000000000000, 82000000000000000000000000,
+      100000000000000000000000000, 120000000000000000000000000, 150000000000000000000000000, 180000000000000000000000000, 220000000000000000000000000, 270000000000000000000000000, 330000000000000000000000000, 390000000000000000000000000, 470000000000000000000000000, 560000000000000000000000000, 680000000000000000000000000, 820000000000000000000000000,
+      1000000000000000000000000000, 1200000000000000000000000000, 1500000000000000000000000000, 1800000000000000000000000000, 2200000000000000000000000000, 2700000000000000000000000000, 3300000000000000000000000000, 3900000000000000000000000000, 4700000000000000000000000000, 5600000000000000000000000000, 6800000000000000000000000000, 8200000000000000000000000000,
+      10000000000000000000000000000, 12000000000000000000000000000, 15000000000000000000000000000, 18000000000000000000000000000, 22000000000000000000000000000, 27000000000000000000000000000, 33000000000000000000000000000, 39000000000000000000000000000, 47000000000000000000000000000, 56000000000000000000000000000, 68000000000000000000000000000, 82000000000000000000000000000,
+      100000000000000000000000000000, 120000000000000000000000000000, 150000000000000000000000000000, 180000000000000000000000000000, 220000000000000000000000000000, 270000000000000000000000000000, 330000000000000000000000000000, 390000000000000000000000000000, 470000000000000000000000000000, 560000000000000000000000000000, 680000000000000000000000000000, 820000000000000000000000000000,
+      1000000000000000000000000000000, 1200000000000000000000000000000, 1500000000000000000000000000000, 1800000000000000000000000000000, 2200000000000000000000000000000, 2700000000000000000000000000000, 3300000000000000000000000000000, 3900000000000000000000000000000, 470000000000000000000000000000, 5600000000000000000000000000000, 6800000000000000000000000000000, 8200000000000000000000000000000,
+      10000000000000000000000000000000, 12000000000000000000000000000000, 15000000000000000000000000000000, 18000000000000000000000000000000,22000000000000000000000000000000, 27000000000000000000000000000000, 33000000000000000000000000000000, 39000000000000000000000000000000,47000000000000000000000000000000, 56000000000000000000000000000000, 68000000000000000000000000000000, 82000000000000000000000000000000, 
+      
+    ];
+
+    // Función para mostrar/ocultar unidad
+    function toggleUnidad() {
+      document.getElementById('unidadDiv').style.display =
         document.getElementById('tipo').value === "capacitor" ? "block" : "none";
-}
+    }
 
-function calcular() {
-    const tipo = document.getElementById("tipo").value;
-    let objetivo = parseFloat(document.getElementById("valor").value);
-    let escala = 1;
-    if (tipo === "capacitor") {
+    // Función para calcular combinaciones
+    function calcular() {
+      const tipo = document.getElementById("tipo").value;
+      let objetivo = parseFloat(document.getElementById("valor").value);
+
+      if (isNaN(objetivo) || objetivo <= 0) {
+        document.getElementById("resultados").innerHTML = "⚠️ Introduce un valor objetivo válido.";
+        return;
+      }
+
+      // Validación para valores excesivamente altos
+      if (objetivo > 1000 && document.getElementById("unidad").value === "F") {
+        document.getElementById("resultados").innerHTML = `<div class="error-message">Te has pasado 😄</div>`;
+        return;
+      }
+
+      let escala = 1;
+      if (tipo === "capacitor") {
         const unidad = document.getElementById("unidad").value;
-        if (unidad === "nF") escala = 1e3;
-        else if (unidad === "uF") escala = 1e6;
-        objetivo *= escala;
-    }
-    const valores = tipo === "resistor" ? resistencias : capacitores_pF;
-    const serie = [], paralelo = [];
-    for (let i = 0; i < valores.length; i++) {
-        for (let j = i; j < valores.length; j++) {
-            const a = valores[i], b = valores[j];
-            const totalS = tipo === "resistor" ? a + b : 1 / (1/a + 1/b);
-            const totalP = tipo === "resistor" ? 1 / (1/a + 1/b) : a + b;
-            const errS = Math.abs((totalS - objetivo) / objetivo) * 100;
-            const errP = Math.abs((totalP - objetivo) / objetivo) * 100;
-            serie.push({a, b, total: totalS, err: errS});
-            paralelo.push({a, b, total: totalP, err: errP});
+        if (unidad === "nF") escala = 1e3; // nF -> pF
+        else if (unidad === "uF") escala = 1e6; // µF -> pF
+        else if (unidad === "F") escala = 1e12; // F -> pF
+        objetivo *= escala; // Convertir el objetivo a pF
+      }
+
+      const valores = tipo === "resistor" ? resistencias : capacitores_pF;
+
+      // Función para calcular combinaciones con múltiples componentes
+      function calcularCombinaciones(valores, objetivo, tipo, maxComponentes) {
+        const resultados = [];
+
+        // Generar todas las combinaciones posibles
+        function generarCombinaciones(actuales, disponibles) {
+          if (actuales.length >= maxComponentes) return;
+
+          for (let i = 0; i < disponibles.length; i++) {
+            const nuevaCombinacion = [...actuales, disponibles[i]];
+            resultados.push(nuevaCombinacion);
+            generarCombinaciones(nuevaCombinacion, disponibles.slice(i));
+          }
         }
+
+        generarCombinaciones([], valores);
+
+        // Calcular totales para cada combinación
+        const calculos = [];
+        for (const combinacion of resultados) {
+          let totalS = 0, totalP = 0;
+          if (tipo === "resistor") {
+            totalS = combinacion.reduce((a, b) => a + b, 0);
+            totalP = 1 / combinacion.reduce((a, b) => a + 1 / b, 0);
+          } else {
+            totalS = 1 / combinacion.reduce((a, b) => a + 1 / b, 0);
+            totalP = combinacion.reduce((a, b) => a + b, 0);
+          }
+
+          const errS = Math.abs((totalS - objetivo) / objetivo) * 100;
+          const errP = Math.abs((totalP - objetivo) / objetivo) * 100;
+
+          if (!isNaN(totalS)) calculos.push({ combinacion, total: totalS, err: errS, tipo: "serie" });
+          if (!isNaN(totalP)) calculos.push({ combinacion, total: totalP, err: errP, tipo: "paralelo" });
+        }
+
+        return calculos;
+      }
+
+      // Buscar combinaciones con error menor al 5%
+      let mejoresResultados = [];
+      let maxComponentes = 2;
+
+      while (mejoresResultados.length === 0 && maxComponentes <= 5) {
+        const resultados = calcularCombinaciones(valores, objetivo, tipo, maxComponentes);
+        mejoresResultados = resultados.filter(r => r.err <= 5);
+        maxComponentes++;
+      }
+
+      // Si no se encontraron combinaciones con error menor al 5%, mostrar todas las combinaciones
+      if (mejoresResultados.length === 0) {
+        const todasLasCombinaciones = calcularCombinaciones(valores, objetivo, tipo, 5);
+        mejoresResultados = todasLasCombinaciones.sort((x, y) => x.err - y.err).slice(0, 10); // Mostrar las 10 mejores
+      }
+
+      // Formatear unidades
+      const unidadText = tipo === "capacitor"
+        ? document.getElementById("unidad").value
+        : "Ω";
+
+      // Mostrar resultados
+      let html = `<h3>Mejores combinaciones (${unidadText}):</h3><ul>`;
+      for (let i = 0; i < mejoresResultados.length; i++) {
+        const { combinacion, total, err, tipo: tipoCombinacion } = mejoresResultados[i];
+        const totalFormatted = total / escala; // Convertir a la unidad seleccionada
+        html += `<li>${combinacion.join(" + ")} (${tipoCombinacion}) = ${totalFormatted.toFixed(3)} ${unidadText} (${err.toFixed(2)}% error)</li>`;
+      }
+      html += "</ul>";
+      document.getElementById("resultados").innerHTML = html || "⚠️ No se encontraron combinaciones válidas.";
     }
-    serie.sort((x, y) => x.err - y.err);
-    paralelo.sort((x, y) => x.err - y.err);
-    const unidadText = tipo === "capacitor" ? document.getElementById("unidad").value : "Ω";
-    let html = "<h3>Serie (mejores 2):</h3><ul>";
-    for (let i = 0; i < 2 && i < serie.length; i++) {
-        html += `<li>${serie[i].a} + ${serie[i].b} = ${serie[i].total.toFixed(3)} ${unidadText} (${serie[i].err.toFixed(2)}% error)</li>`;
-    }
-    html += "</ul><h3>Paralelo (mejores 2):</h3><ul>";
-    for (let i = 0; i < 2 && i < paralelo.length; i++) {
-        html += `<li>${paralelo[i].a} || ${paralelo[i].b} = ${paralelo[i].total.toFixed(3)} ${unidadText} (${paralelo[i].err.toFixed(2)}% error)</li>`;
-    }
-    html += "</ul>";
-    document.getElementById("resultados").innerHTML = html;
-}
-toggleUnidad();
-</script>
+
+    // Inicializar visibilidad de la unidad
+    toggleUnidad();
+  </script>
 </body>
 </html>

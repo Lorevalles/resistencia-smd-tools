@@ -2,24 +2,100 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>resistencia-smd-tools</title>
-  <link rel="stylesheet" href="styles/style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadoras y Herramientas SMD</title>
+  <style>
+    /* Estilos generales */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #007bff;
+      margin-top: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 15px;
+    }
+
+    a {
+      display: block;
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    a:hover {
+      background-color: #0056b3;
+    }
+
+    .section-title {
+      font-size: 1.5em;
+      color: #007bff;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 5px;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <h1>Calculadoras y Herramientas SMD</h1>
-    <ul>
-      <li><a href="calc-smd.html">Calculadora SMD (3 y 4 dígitos)</a></li>
-      <li><a href="calc-smd-universal.html">Calculadora SMD universal</a></li>
-      <li><a href="calc-eia198.html">Calculadora de Capacitores EIA-198</a></li>
-      <li><a href="calc-eia96.html">Calculadora de Resistencias EIA-96</a></li>
-      <li><a href="calc-combinacion-resistencias.html">Combinación de Resistencias</a></li>
-      <li><a href="calc-combinacion-capacitores.html">Combinación de Capacitores</a></li>
-      <li><a href="combinador.html">Combinador Universal</a></li>
-      <li><a href="tabla-smd.html">Tabla de códigos SMD</a></li>
-      <li><a href="tabla-eia198.html">Tabla de códigos EIA-198</a></li>
-      <li><a href="tabla-smd.html">Buscador de códigos SMD</a></li>
-    </ul>
+
+    <!-- Sección de Calculadoras -->
+    <div class="section">
+      <p class="section-title">Calculadoras</p>
+      <ul>
+        <li><a href="calc-smd.html">Calculadora SMD (3 y 4 dígitos)</a></li>
+        <li><a href="calc-smd-universal.html">Calculadora SMD Universal</a></li>
+        <li><a href="calc-eia198.html">Calculadora de Capacitores EIA-198</a></li>
+        <li><a href="calc-eia96.html">Calculadora de Resistencias EIA-96</a></li>
+        <li><a href="calc-combinacion-resistencias.html">Combinación de Resistencias</a></li>
+        <li><a href="calc-combinacion-capacitores.html">Combinación de Capacitores</a></li>
+        <li><a href="combinador.html">Combinador Universal</a></li>
+      </ul>
+    </div>
+
+    <!-- Sección de Tablas -->
+    <div class="section">
+      <p class="section-title">Tablas de Referencia</p>
+      <ul>
+        <li><a href="tabla-smd.html">Tabla de Códigos SMD</a></li>
+        <li><a href="tabla-eia198.html">Tabla de Códigos EIA-198</a></li>
+        <li><a href="tabla-smd.html">Buscador de Códigos SMD</a></li>
+      </ul>
+    </div>
+
+    <!-- Sección de Semiconductores -->
+    <div class="section">
+      <p class="section-title">Semiconductores</p>
+      <ul>
+        <li><a href="semiconductores.html">Buscador de Transistores y Diodos SMD</a></li>
+      </ul>
+    </div>
   </div>
 </body>
 </html>

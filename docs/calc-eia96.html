@@ -1,36 +1,135 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Calculadora EIA-96</title>
-  <link rel="stylesheet" href="../styles/style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Resistencias EIA-96</title>
+  <style>
+    /* Estilos generales */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #007bff;
+      margin-top: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+
+    button.calcular {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button.calcular:hover {
+      background-color: #0056b3;
+    }
+
+    #resultado {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    a.back-link {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+      color: #007bff;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    a.back-link:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 20px;
+      text-align: center;
+      color: #777;
+      font-size: 0.9em;
+    }
+  </style>
 </head>
 <body>
-  <h1>Calculadora de Resistencias EIA-96</h1>
-  <form oninput="calc()">
-    <input type="text" id="codigo" placeholder="Ej: 24B, 82C..." />
-    <button type="button" onclick="calc()">Calcular</button>
-    <p id="resultado"></p>
-  </form>
-  <a href="index.html">&larr; Volver al índice</a>
-<script>
-const tabla = {
-  24: 178, 82: 665, 10: 100, 12: 121, 15: 150, 16: 162
-};
-const multiplicadores = {
-  A: 1, B: 10, C: 100, D: 1e3, E: 10e3, F: 100e3
-};
-function calc() {
-  const c = document.getElementById("codigo").value.trim().toUpperCase();
-  const num = parseInt(c.slice(0, -1));
-  const letra = c.slice(-1);
-  if (tabla[num] && multiplicadores[letra]) {
-    const valor = tabla[num] * multiplicadores[letra];
-    document.getElementById("resultado").textContent = valor + " Ω";
-  } else {
-    document.getElementById("resultado").textContent = "Código inválido";
-  }
-}
-</script>
+  <div class="container">
+    <h1>Calculadora de Resistencias EIA-96</h1>
+
+    <!-- Formulario de Entrada -->
+    <form oninput="calc()">
+      <input type="text" id="codigo" placeholder="Ej: 24B, 82C..." />
+      <button type="button" class="calcular" onclick="calc()">Calcular</button>
+    </form>
+
+    <!-- Resultado -->
+    <div id="resultado"></div>
+
+    <!-- Enlace de Regreso -->
+    <a href="index.html" class="back-link">← Volver al índice</a>
+
+    <!-- Pie de Página -->
+    <footer>Proyecto por Lorenzo Vallés — Calculadora EIA-96</footer>
+  </div>
+
+  <script>
+    // Tabla de valores EIA-96
+    const tabla = {
+      24: 178, 82: 665, 10: 100, 12: 121, 15: 150, 16: 162
+    };
+
+    // Multiplicadores según la letra
+    const multiplicadores = {
+      A: 1, B: 10, C: 100, D: 1e3, E: 10e3, F: 100e3
+    };
+
+    // Función para calcular el valor de la resistencia
+    function calc() {
+      const c = document.getElementById("codigo").value.trim().toUpperCase();
+      const num = parseInt(c.slice(0, -1)); // Extraer los dígitos
+      const letra = c.slice(-1); // Extraer la letra
+
+      if (tabla[num] && multiplicadores[letra]) {
+        const valor = tabla[num] * multiplicadores[letra];
+        document.getElementById("resultado").innerHTML = `<strong>Resultado:</strong><br>${valor.toLocaleString()} Ω`;
+      } else {
+        document.getElementById("resultado").innerHTML = "⚠️ Código inválido";
+      }
+    }
+  </script>
 </body>
 </html>
