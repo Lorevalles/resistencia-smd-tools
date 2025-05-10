@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Calculadoras y Herramientas SMD</title>
+  <link rel="icon" href="img/favicon.ico" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -17,19 +18,26 @@
       text-align: center;
       color: #007bff;
       margin-top: 20px;
+      font-size: 2em;
+      text-shadow: 1px 1px 2px #aaa;
     }
 
     .container {
       max-width: 800px;
       margin: 0 auto;
       padding: 20px;
-      background-color: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background-color: #ffffffcc;
+      border-radius: 10px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .section {
+      margin-top: 30px;
     }
 
     ul {
-      list-style-type: none;
+      list-style: none;
       padding: 0;
     }
 
@@ -39,49 +47,63 @@
 
     a {
       display: block;
-      padding: 10px 15px;
+      padding: 12px 18px;
       background-color: #007bff;
       color: white;
       text-decoration: none;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      font-size: 1em;
     }
 
     a:hover {
       background-color: #0056b3;
+      transform: translateX(5px);
     }
 
     .section-title {
-      font-size: 1.5em;
+      font-size: 1.4em;
       color: #007bff;
-      margin-bottom: 10px;
       border-bottom: 2px solid #007bff;
-      padding-bottom: 5px;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.9em;
+      color: #888;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Calculadoras y Herramientas SMD</h1>
+    <h1>🔧 Calculadoras y Herramientas SMD</h1>
 
-<!-- Sección de Calculadoras -->
-<div class="section">
-  <p class="section-title">Calculadoras</p>
-  <ul>
-    <li><a href="calc-smd.html">Calculadora SMD (3 y 4 dígitos)</a></li>
-    <li><a href="calc-smd-universal.html">Calculadora SMD Universal</a></li>
-    <li><a href="calc-eia198.html">Calculadora de Capacitores EIA-198</a></li>
-    <li><a href="calc-eia96.html">Calculadora de Resistencias EIA-96</a></li>
-    <li><a href="calc-combinacion-resistencias.html">Combinación de Resistencias</a></li>
-    <li><a href="calc-combinacion-capacitores.html">Combinación de Capacitores</a></li>
-    <li><a href="combinador.html">Combinador Universal</a></li>
-    <li><a href="divisor-voltaje.html">Divisor de Voltaje</a></li> <!-- Enlace corregido -->
-  </ul>
-</div>
+    <!-- Sección de Calculadoras -->
+    <div class="section">
+      <p class="section-title">🧮 Calculadoras</p>
+      <ul>
+        <li><a href="calc-smd.html">Calculadora SMD (3 y 4 dígitos)</a></li>
+        <li><a href="calc-smd-universal.html">Calculadora SMD Universal</a></li>
+        <li><a href="calc-eia198.html">Calculadora de Capacitores EIA-198</a></li>
+        <li><a href="calc-eia96.html">Calculadora de Resistencias EIA-96</a></li>
+        <li><a href="calc-combinacion-resistencias.html">Combinación de Resistencias</a></li>
+        <li><a href="calc-combinacion-capacitores.html">Combinación de Capacitores</a></li>
+        <li><a href="combinador.html">Combinador Universal</a></li>
+        <li><a href="divisor-voltaje.html">Divisor de Voltaje</a></li>
+      </ul>
+    </div>
 
     <!-- Sección de Tablas -->
     <div class="section">
-      <p class="section-title">Tablas de Referencia</p>
+      <p class="section-title">📘 Tablas de Referencia</p>
       <ul>
         <li><a href="tabla-smd.html">Tabla completa de códigos SMD (EIA-96)</a></li>
         <li><a href="tabla-eia198.html">Tabla de Capacitores EIA-198</a></li>
@@ -91,11 +113,15 @@
 
     <!-- Sección de Semiconductores -->
     <div class="section">
-      <p class="section-title">Semiconductores</p>
+      <p class="section-title">🔍 Semiconductores</p>
       <ul>
-        <li><a href="Semiconductores.HTML">Buscador de Transistores y Diodos SMD</a></li>
+        <li><a href="Semiconductores.html">Buscador de Transistores y Diodos SMD</a></li>
       </ul>
     </div>
+
+    <footer>
+      Proyecto desarrollado por Lorenzo Vallés · <a href="https://github.com/Lorevalles/resistencia-smd-tools" target="_blank">Ver en GitHub</a>
+    </footer>
   </div>
 </body>
 </html>
